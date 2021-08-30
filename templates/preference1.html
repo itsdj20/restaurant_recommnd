@@ -1,0 +1,141 @@
+<html>
+    <head>
+        <title>Restaurant Guru</title>
+        <link rel="stylesheet" href="static/stylepreference.css">
+        <link href="https://fonts.googleapis.com/css?
+        family=Dosis&display=swap" rel="stylesheet">
+        <style>
+            .autocomplete-items div {
+                
+                position:relative;
+                width: 94.3%;
+                padding: 10px;
+                cursor: pointer;
+                left:-400px;
+                top:-400px;
+                background-color: #ffa5a5; 
+                border-bottom: 1px solid #d4d4d4; 
+            }
+            .autocomplete-items div:hover {
+        
+                background-color: white;
+                margin-left:1%;
+                margin-top:-1%;
+                box-shadow: 0 0 40px 20px rgba(58, 56, 56, 0.29);
+                
+            
+            }
+                        .autocomplete-active {
+                background-color: rgb(255, 255, 255) !important; 
+                color: #000000;
+            }
+        </style>
+    </head>
+</html>
+<body>
+    <div class="first">
+        <div class="navbar">
+            <img src="static/img/Group 1.png">
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('explore') }}">Search</a></li>
+                <li><a href="#">About</a></li>
+            </ul>
+        </div>
+        <div class="container">
+        <div class="box">
+            <div class="in">
+                <form autocomplete="off" action="{{ url_for('output') }}" method="POST">
+                    <div class="autocomplete">
+                    <h2>ENTER YOUR PREFERENCE</h2>
+                    <input id="myInput" type="text" name="loc" class="input-box" placeholder="Location" >
+                    <input type="number" name="min" class="input-box" placeholder="Min. Cost" required>
+                    <input type="number" name="max" min="0" class="input-box" placeholder="Max. Cost" required>
+                    <input id="cusIne" type="text" name="cuis" class="input-box" placeholder="Cuisine" required>
+                    <input type="number" name="guest" min="0" class="input-box" placeholder="Number Of Guest" required>
+                    <button type="submit" class="submit-btn">SEARCH</button>
+                    </div>
+                </form>
+            </div>
+        </div>    
+        </div>
+    </div>
+    <script>
+        function autocomplete(inp, arr) {
+          var currentFocus;
+          inp.addEventListener("input", function(e) {
+              var a, b, i, val = this.value;
+              closeAllLists();
+              if (!val) { return false;}
+              currentFocus = -1;
+              a = document.createElement("DIV");
+              a.setAttribute("id", this.id + "autocomplete-list");
+              a.setAttribute("class", "autocomplete-items");
+              this.parentNode.appendChild(a);
+              for (i = 0; i < arr.length; i++) {
+                if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                  b = document.createElement("DIV");
+                  b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                  b.innerHTML += arr[i].substr(val.length);
+                  b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                  b.addEventListener("click", function(e) {
+                      inp.value = this.getElementsByTagName("input")[0].value;
+                      closeAllLists();
+                  });
+                  a.appendChild(b);
+                }
+              }
+          });
+          inp.addEventListener("keydown", function(e) {
+              var x = document.getElementById(this.id + "autocomplete-list");
+              if (x) x = x.getElementsByTagName("div");
+              if (e.keyCode == 40) {
+                currentFocus++;
+                addActive(x);
+              } else if (e.keyCode == 38) { 
+                
+                currentFocus--;
+                addActive(x);
+              } else if (e.keyCode == 13) {
+                e.preventDefault();
+                if (currentFocus > -1) {
+                
+                  if (x) x[currentFocus].click();
+                }
+              }
+          });
+          function addActive(x) {
+            if (!x) return false;
+            removeActive(x);
+            if (currentFocus >= x.length) currentFocus = 0;
+            if (currentFocus < 0) currentFocus = (x.length - 1);
+            x[currentFocus].classList.add("autocomplete-active");
+          }
+          function removeActive(x) {
+            for (var i = 0; i < x.length; i++) {
+              x[i].classList.remove("autocomplete-active");
+            }
+          }
+          function closeAllLists(elmnt) {
+            
+            var x = document.getElementsByClassName("autocomplete-items");
+            for (var i = 0; i < x.length; i++) {
+              if (elmnt != x[i] && elmnt != inp) {
+                x[i].parentNode.removeChild(x[i]);
+              }
+            }
+          }
+        
+          document.addEventListener("click", function (e) {
+              closeAllLists(e.target);
+          });
+        }
+        
+        
+        var loc=['Sudama Nagar', 'BCM Heights, Vijay Nagar', 'Sarwate Bus Stand', 'Old Palasia', 'Vijay Nagar', 'South Tukoganj', 'HIG-LIG', ' Hotel Somdeep Palace, Vijay Nagar', 'New Palasia', 'Sapna Sangeeta Mall, Sapna Sangeeta', 'Sayaji Hotel, Vijay Nagar', 'Sarafa Bazaar', 'Khajrana', 'Hotel Effotel, Vijay Nagar', 'Sapna Sangeeta', '56 Dukan, New Palasia', 'Hotel Shreemaya, RNT Marg', 'Malhar Mega Mall, Vijay Nagar', 'Indore Marriott Hotel, Vijay Nagar', 'YN Road', 'Geeta Bhavan', 'Bhawar Kuan', 'Annapurna Road', 'Infiniti Hotel, Vijay Nagar', 'RNT Marg', 'Rau', 'Rajendra Nagar', 'Manik Bagh Road', 'MR 10 Road', 'Mangal City Mall, Vijay Nagar', 'Radisson Blu Hotel, Vijay Nagar', 'Hotel Wow, Vijay Nagar', 'By Pass Road (North)', 'C21 Mall, Vijay Nagar', 'The Grand Bhagwati', 'The Red Maple Mashal, Rau', 'Fairfield By Marriott', 'Crescent Spa & Resorts', 'Hotel Best Western Plus O2, South Tukoganj', 'Lemon Tree Hotel, RNT Marg', 'Country Inn & Suites By Radisson, Vijay Nagar', 'Kothari Market', 'Hotel Crown Palace, South Tukoganj', 'Papaya Tree Hotel', 'By Pass Road (South)', 'Hotel Amar Vilas, Press Complex', 'Mari Mata Square', 'Hotel Shreemaya Residency, Press Complex', 'Golden Gate, Vijay Nagar', 'Regenta Central, By Pass North', 'Jail Road', 'Gangwal Bus Stand', 'Chhavani', 'Malharganj', 'Ranjeet Hanuman', 'Rajwada', 'Navlakha', 'Airport Road', 'Mathurawala, Airport Road', 'Treasure Island Mall, South Tukoganj', 'Hotel Kings Park, Bhawar Kuan', 'Mathurawala, RNT Marg', 'Bombay Bazaar', 'Press Complex', 'One Centre, New Palsia', 'Devi Ahilya Bai Holkar Airport, Airport Road', 'The Sensation Hotel - Rajendra Nagar', 'Hotel Surya, South Tukoganj', 'Hotel Kanchan Tilak, South Tukoganj', 'Pride Hotel & Convention Centre', 'Hotel Papaya Tree']
+        var ar=['Fast Food', 'Cafe', 'Bakery', 'North Indian', 'Mughlai', 'South Indian', 'Mithai', 'Beverages', 'Chinese', 'Pizza', 'Italian', 'Bar Food', 'Burger', 'Asian', 'Continental', 'Street Food', 'Desserts', 'Rolls', 'Sandwich', 'French', 'Finger Food', 'Lebanese', 'Ice Cream', 'Biryani', 'Momos', 'Mediterranean', 'Mexican', 'Japanese', 'Kashmiri', 'Awadhi', 'Modern Indian', 'BBQ', 'American', 'Paan', 'Maharashtrian', 'Tea', 'Coffee', 'Tibetan', 'Juices', 'Gujarati', 'Healthy Food', 'Wraps', 'Rajasthani', 'Salad', 'Seafood', 'Kebab', 'Arabian', 'Andhra', 'nan', 'Thai', 'Drinks Only']
+        autocomplete(document.getElementById("myInput"), loc);
+        autocomplete(document.getElementById("cusIne"), ar)
+        </script>
+</body>
+</html>

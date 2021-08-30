@@ -1,0 +1,472 @@
+<html>
+    <head>
+        <title>Restaurant Guru</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesearch.css') }}">
+        <link href="https://fonts.googleapis.com/css?
+        family=Dosis&display=swap" rel="stylesheet">
+        <style>
+            .autocomplete-items div {
+                margin-left: 32.7%;
+                width: 25%;
+                padding: 10px;
+                cursor: pointer;
+
+                background-color: #ffa5a5; 
+                border-bottom: 1px solid #d4d4d4; 
+            }
+            .autocomplete-items div:hover {
+                background-color: white;
+                width: 28.7%; 
+                margin-left: 31%;
+                box-shadow: 0 0 40px 20px rgba(58, 56, 56, 0.29);
+                height: 2%;
+            }
+                        .autocomplete-active {
+                background-color: rgb(255, 255, 255) !important; 
+                color: #000000;
+            }
+
+        </style>
+    </head>
+</html>
+<body>
+    <div class="first">
+        <div class="navbar">
+            <img src="static/img/Group 1.png">
+
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('explore') }}">Search</a></li>
+                <li><a href="#">About</a></li>
+            </ul>
+            
+
+        </div>
+        <div class="input">
+            <form autocomplete="off" action="{{url_for('output')}}" method="POST">
+            <div class="autocomplete">
+            <input id="myInput" type="text" name="search" placeholder="Restaurant Name..."> 
+            <button id="find_res" type="submit" class="ab">SEARCH</button>
+            </div>
+            </form>
+        </div>
+        <div class="service">
+            <img src="static/img/Our Services.png" >
+        </div>
+        <div class="center">
+            <a href="{{ url_for('preference1') }}"><img src="static/img/Group 6.png"></a>
+            <a href="{{ url_for('preference2') }}"><img src="static/img/Group 7.png" ></a>
+        </div>
+    </div>
+    <script>
+        function autocomplete(inp, arr) {
+          var currentFocus;
+          inp.addEventListener("input", function(e) {
+              var a, b, i, val = this.value;
+              closeAllLists();
+              if (!val) { return false;}
+              currentFocus = -1;
+              a = document.createElement("DIV");
+              a.setAttribute("id", this.id + "autocomplete-list");
+              a.setAttribute("class", "autocomplete-items");
+              this.parentNode.appendChild(a);
+              for (i = 0; i < arr.length; i++) {
+                if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                  b = document.createElement("DIV");
+                  b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                  b.innerHTML += arr[i].substr(val.length);
+                  b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                  b.addEventListener("click", function(e) {
+                      inp.value = this.getElementsByTagName("input")[0].value;
+                      closeAllLists();
+                  });
+                  a.appendChild(b);
+                }
+              }
+          });
+          inp.addEventListener("keydown", function(e) {
+              var x = document.getElementById(this.id + "autocomplete-list");
+              if (x) x = x.getElementsByTagName("div");
+              if (e.keyCode == 40) {
+                currentFocus++;
+                addActive(x);
+              } else if (e.keyCode == 38) { 
+                
+                currentFocus--;
+                addActive(x);
+              } else if (e.keyCode == 13) {
+                e.preventDefault();
+                if (currentFocus > -1) {
+                
+                  if (x) x[currentFocus].click();
+                }
+              }
+          });
+          function addActive(x) {
+            if (!x) return false;
+            removeActive(x);
+            if (currentFocus >= x.length) currentFocus = 0;
+            if (currentFocus < 0) currentFocus = (x.length - 1);
+            x[currentFocus].classList.add("autocomplete-active");
+          }
+          function removeActive(x) {
+            for (var i = 0; i < x.length; i++) {
+              x[i].classList.remove("autocomplete-active");
+            }
+          }
+          function closeAllLists(elmnt) {
+            
+            var x = document.getElementsByClassName("autocomplete-items");
+            for (var i = 0; i < x.length; i++) {
+              if (elmnt != x[i] && elmnt != inp) {
+                x[i].parentNode.removeChild(x[i]);
+              }
+            }
+          }
+        
+          document.addEventListener("click", function (e) {
+              closeAllLists(e.target);
+          });
+        }
+        
+        
+        var countries=['Namo Sandwich', 'Bake N Shake', 'Shree Gurukripa',
+               'Nafees Restaurant', 'Hotel Guru Kripa', 'Hotel Guru Kripa Avenue',
+               'Maa Ki Rasoi', 'Apna Sweets', 'Dutt Guru Kripa', 'Oye24',
+               'Mitti - Organic. Fresh. Desi.', 'SD 21 - Hotel Somdeep Palace',
+               'Sagar Gaire', "Domino's Pizza", 'Cravings - Sayaji Hotel',
+               'Hotel Rajhans', 'Hotel Zakir', 'The Cube - Hotel Effotel',
+               '99 Rotiwala', 'Madhuram Sweets', 'Kebabsville - Sayaji Hotel',
+               'Shreemaya Celebration', 'Hotel Madni Darbar', 'The Monroe',
+               'Singh Sahab', 'Taberna - The Cafe Bar', 'Mangosteen Cafe', 'KFC',
+               'Tic Tac Toe', 'Indore Kitchen - Indore Marriott Hotel',
+               'Dilli Darbar Family Restaurant', 'Mocha', 'Rasgulla House',
+               'Gyaniji Ka Khalsa Dhaba', 'Pishori Restaurant', 'Banana Leaf',
+               'Raja Ram - Dhaba, Sweets & Namkeen', 'Patissez',
+               'Shiva Chinese Wok', 'Old Kolkata Roll Club', 'Tinku Everfresh',
+               'Mama Loca', 'Hobnob Gourmet Cafébar', 'O2 Cafe De La Ville',
+               'Guru Kripa', 'Just Paratha', 'Just My Bakes', 'Mr. Beans',
+               'Cafe Chapter One', "Tinku's", 'Cafe Terazza', 'Bollywood Theka',
+               'Mustang - Hotel Somdeep Palace', 'Pizza Hut', 'Johny Hot Dog',
+               'Hotel Shree Leela', 'Chill Baby', 'Cafe Yolo', 'JMB',
+               'Chick N Serve', 'Food 4 Foodie', 'Vijay Chaat House',
+               'Ravi Alpahar', 'Naturals Ice Cream', 'Shree Leela Dal Bafle',
+               'The GroundBaking Co.', 'Behrouz Biryani', 'Sheetal Restaurant',
+               'Parag Bakery & Fast Food', 'Oiya', '10 Downing Street',
+               'Hotel Shreemaya', 'Mukki Ke Zayke', 'Little Monk',
+               "Chang's Legacy", 'JAL - A Jungle Restaurant', 'Foobae',
+               'Singh Restaurant', 'Dilli Da Roll', "Sam's Momos",
+               'Pind Balluchi', 'Tea Shack', 'Via Indore', 'Delicious Hut',
+               'Madhur Zayka Sweets n Cafe', 'Ethyl Bar - Radisson Blu Hotel',
+               'Mediterra - Sayaji Hotel', 'Twilight - Hotel WOW',
+               'The Creative Kitchen - Radisson Blu Hotel',
+               'One Asia - Indore Marriott Hotel', 'F Bar & Kitchen',
+               "Jonathan's Kitchen", '5/78 Skybar', 'Ni Hao - Radisson Blu Hotel',
+               'Indiya Oye - Radisson Blu Hotel', 'KYRO',
+               'Constellation - Hotel WOW', 'Sky Blue Sports Bar',
+               'Sanchi - Sayaji Hotel', 'Not So Desi',
+               'Mr & Mrs Somani - The Grand Bhagwati', 'Shosha Cafebar',
+               'Vidorra', 'Chopstick City - Sayaji Hotel', 'Farzi Café',
+               '#1, Culinary Avenue - The Red Maple',
+               'Cafe Piano - The Grand Bhagwati', 'Kava - Fairfield by Marriott',
+               '54 Praangan - Indore Marriott Hotel',
+               'Indore Baking Company - Indore Marriott Hotel', 'Calypso',
+               'The Beer Cafe', 'Good Old Days - Hotel Effotel',
+               "Agent Jack's Bar", 'Tipsy Tales Bar Terminal', 'Level 3',
+               'Mirchi and Mime', 'Trance The Pub',
+               'The Eighteen Fine Dine Lounge', 'Dakku,s', 'Glazz',
+               'Courtyard - Crescent Spa & Resorts', 'Quorum - Sayaji Hotel',
+               'High Ball - Hotel Best Western Plus', 'Ego',
+               'Diamante - Indore Marriott Hotel',
+               '99 Degrees & Rising - Sayaji Hotel',
+               'Addiction Rooftop Bar By Solaris', 'Slounge - Lemon Tree Hotel',
+               'Osmium Lounge', 'Brix & Barrels', 'Stars N Sky',
+               'Opium Bar By The Roof', 'Little Italy', 'Golden Oven',
+               'Spiritual Pub & Restaurant',
+               'Big Shot Bar - Country Inn & Suites by Radisson',
+               'Beeji Restaurant', 'Classic Bar & Restaurant',
+               'Lancer Cocktail Lounge', 'Signature Boutique Hotel',
+               "Hill's View - Papaya Tree Hotel", 'Echidna Restobrew',
+               'Quenchyard', 'The Cliff Restaurant & Bar',
+               'Zest - Papaya Tree Hotel', 'Salt and Pepper', 'Couple Lounge',
+               "Jonathan's Grill & Barbeque", 'White House', "Boozer's Bar",
+               'Sapna Bar And Restaurant', 'Fagun Restaurant',
+               'Capers - Hotel Effotel', 'Hotel Shreemaya Residency',
+               'The Piano Project', 'City Gymkhana Club', 'Citrus Cafe',
+               'Livup Cafebar & Lounge',
+               'Mosaic - Country Inn & Suites by Radisson', 'Hotel Kanchan',
+               'The Arch - Golden Gate', '60 ML',
+               'Exotica The Lounge Bar - Crescent Spa & Resorts', 'District 11',
+               'Shack Pool Bar & Grill - Crescent Spa & Resorts',
+               'The Lounge Bar - Hotel Amar Vilas', 'The Tipsy Buffalo',
+               'Sundown - Solaris Club', 'O2 Club & Lounge',
+               'Blue Dip - Golden Gate', 'Smaaash', 'Chasers Pub & Restaurant',
+               'Masala Craft - Regenta Central Hotel', 'Fire & Smoke',
+               'Lal Balti Ki Kachori', 'Flavour Soda', 'Santosh Paan',
+               'Joshi Dahi Bada House', 'Swadisht Samosa Corner',
+               'Jagdeesh Sweets', 'JSK Sweets & Restaurant', 'Punjabi Dhaba',
+               'Chanchal Namkeen', 'Bombay Bakery', 'Sawariya Seth Khichdi',
+               'Ramesh South Indian', 'Shubham Chinese Point',
+               'Goli Vada Pav No. 1', 'Mittal Kachori', 'Vadilal Ice Cream',
+               'Bombay Bhel', 'Guptaji Paratha House', 'Honey Pizza',
+               'Mr. Bhel Bhandari', 'Shreenath Fariyali Khichdi', 'Tea De Pot',
+               'Agrawal Kachori Corner', 'Tanishq Cafe',
+               'Shree Mahalaxmi Moong Ke Bhajiye', 'Shree Baba Sweets',
+               'Dairy Junction', 'Ramesh Masala Dosa', 'Baba Juice Centre',
+               'Anantanand Alpahar Gruh', 'Kachori Corner',
+               'Milap The Pan Destination', 'RL Chat Bhandar', 'Chintu Momos',
+               'Prem Paratha', 'Potato Uncle', 'Shree Parshwanath Pan Sadan',
+               'Agrawal Juice and Ice Cream', 'Mangal Sweets',
+               'Shahi Khaman- Jalaram Farsan', 'Baba Shree Paan',
+               'Agrawal Nashta', 'Shri Bharkha Devi Ice Cream',
+               'Goyal Fruit Juice Centre', 'Mahadev Lassi',
+               'Karnawat Bhojan Prasadi', 'Vedant Chat Chaupati',
+               'Indori Chinese point', 'Bombay Bahu Chinese Point',
+               'Prayas Foods', 'Iceland Vadilal', 'Jail Cafe Chai Bar',
+               'Pooja Kanchan Pan', 'Bholainath Fariyali Khichdi Center',
+               'Sai Kripa Refreshment', 'RK bakers', 'The Happiness Corner',
+               'Bombay Refreshment', 'Salasar Snacks By Kharab Chai',
+               'Jai Bajrang Bombay Bhel', 'Hot Point (The Royal Omlette)',
+               'Chintu Veg Momos', 'Zero Cafe', 'Baba Nariyal Pani',
+               'Jai Shree Mahakal Juice Center', 'Veg Bites',
+               'Rathore Momos & Colcata Roll', 'Amrit Shri Ice Cream Parlour',
+               'Jai Ranjeet Gajak Bhandar', 'Babu Bakery and Dudh Dairy',
+               'Choice Namkeen', 'Yadav Pan Sadan', 'Jay Mahakal Aloo Paratha',
+               'Chai Network', 'Jai Mata Di Vada Pav',
+               'Karnawat Bhojan Prasadi Chat Chaupati Restaurant', 'Anil Cafe',
+               'Shivegiri Chaat and South Indian', 'Puran Phalahari',
+               'Shree Balaji Juice Centre', 'Karnawat Bhojnalya And Guest House',
+               'Bhukkus Foodtruck Cafe', 'Shahi Bhel',
+               "Khandelwal's Indori Namkeen", "Simi's", 'Masters Bakery Krozzon',
+               'Shreemaya Celebrity', 'South Avenue', 'Veera Di Hatti',
+               'Atul Sandwich And Cafe', 'Pleasure House', "Cakesmith's Alley",
+               'Urban Desi Bistro', 'Fork It Cafe',
+               "Chef Lucky's Paratha On Wheels", 'Om Namkeen', 'Drunken Monkey',
+               'Cakes & More', 'Hangover The Gastro Pub', 'Faasos', 'Oye Pappe',
+               "Chef's Alcove", 'Cream Stone', 'Bake Affaire',
+               'Laxmi Narayan Doodhwala', 'Shree Gautam Chinese', 'Tea Diaries',
+               'Waffles & More', 'Keventers', 'Nautica - The Red Maple',
+               'The Container Cafe', 'Shri Balaji',
+               'Woodstock Cafe - The Red Maple', 'Chai Kaapi',
+               'LIG Maggie & Pasta', 'Khana Khazana K2', 'Bocca Buona',
+               'Jain Mithai Bhandar', 'Angithi Restaurant', 'Mharo Rajwaad',
+               'Mathurawala Sweets', "Gyani's Kafe",
+               "Baree's - Punjabis By Nature", 'FOI- Food of Indians',
+               'Ab Tak 56', 'Bherunath', 'Cakes To Indore', 'Mr. Bawarchi',
+               "Mclaren's Cafe", 'The Cafe Square', 'Cafe Lagoon',
+               'Famous Dal Bafale', 'Youth Adda', 'Mid Town Madness',
+               'Clam O Bar', 'Victoria Club & Lounge', "Gabba's Cake", 'Alav',
+               'Chaar Bhuja Sweets & Namkeen', 'Ginger Ganesha',
+               'Shree Krishna Bhojnalay', 'Yash Dhaba', 'Blackwood Cafe',
+               'Mamaji Restaurant & Bhojnalay', 'Al - Quddus Restaurant',
+               'Khaoo Restaurant', 'Hotel Pearl & Restaurant', "Sam's Pizza",
+               'Mithas 24', 'Panditji - Pure Veg Restaurant', 'Beyond Temptation',
+               'Tea Post', 'Mathurawala Restaurant', "Hat's Off", 'Saffron',
+               'Delhi Darbar Dhaba', 'India Junction', 'Destiny Kitchen', 'CBZ',
+               'Black Pearl', 'Cafe Coffee Day', 'The Indorie Kitchen',
+               'Cafe Idiots', 'Sky Hi', "Chinu's Cafe", 'Cafe El Carpediem',
+               'The London Salon & Cafe', "Cake's Valley", 'Shri Bhojanalaya',
+               'Momos Villa', 'seon veg restaurant', 'Chillz',
+               'Shraddha Chinese  Point', 'Yashika Palace', "Dev's Bakery",
+               'K2H Cafe and Restaurant', 'OMG Lunch Buzzer',
+               'The London Shakes & Cafe', 'Cake Boutique', 'Biryanotech Cafe',
+               'Cafe Emotions', 'Big Boss Restaurant', 'Amrapali Restaurant',
+               'Maakhan Mishri', 'Jain Bhojanalay', 'Agrawal Sweets',
+               'Cafe Cubano', 'Kadaknath Special Chicken Restaurant',
+               'Mugs And Beans', 'Subway', 'Chickenlicious Indore',
+               'Eenadee Cafe N Restaurant', 'Sawariya Khichdi',
+               'Nation Nutrition', 'Ajab Gajab',
+               'Mathurawala Chat Chowpati & Bakery', 'K2H', 'MealGaadi',
+               'Nema Gajak Kulfi', 'Shree Nath Restaurant', "Cakes N' Craft",
+               'Nom! Nom! Chinese', 'Khaanafest', 'Madni Non Veg Restaurant',
+               'Chakhna Cafe', 'The Chocolate Room', "McDonald's",
+               "Noor's Kitchen", 'Yummy Tummy The Cheese Bar',
+               'Midnight Chillies', 'Cafe Kono', 'Panchavati Gaurav',
+               'Wanna Puff', '12 AM - Hotel Somdeep Palace', 'Saify Hotel',
+               'Gordhan Thal', 'Icekraft', "Ranjeet's Kitchen",
+               'Make My Sandwich', 'Urban Lokal Cafe', 'Spicy Family Restaurant',
+               'Linkbite', 'Apna Dhaba(MTM)', 'Lucky Bakers', 'Fantasy',
+               'Sigdi - Sizzler & South Indian', 'Saify Family Restaurant',
+               'Young Tarang', 'Sharma Namkeen Mithaiyan',
+               "MP-09 Nagpal's Chole Bhature", 'NH3 Kitchen', 'Ansh Restaurant',
+               'Riddhi Siddhi', 'Indian Coffee House', 'Paneer King',
+               'Ashirwad Bhojnalaya', 'Mr. Eggzotic', 'Udan Khatola',
+               'Rajkamal Dal Bafle', 'Swaad Delhi Da',
+               'Shawarma Grill & Momo Station', 'Bablu Sandwich',
+               'Drool- The Highway Shack', 'Babluji Punjabi Foods & Cafe',
+               'Upvaas', 'Goldy Di Hatti', 'Rangla Punjab The Dhaba',
+               'Cream Centre', 'Lotus Cafe & Restaurant', 'Freito',
+               'Pitchers Cafebar', "Kebabilal's", 'House Of Malts', 'Angaraa',
+               'Shree Chotiwala Restaurant', 'Vrindavan Restaurant',
+               'Oakaz - Cafe and Restaurant', 'Khanabadosh', 'Mud Oven',
+               'Charpai - The Dhaba', 'Cafe Palette', "Mr. Singh's",
+               'GFC - The Great Food Company', 'The Urban Rasoi',
+               'Aieroc  Resto Cafe', 'Culture Restaurant',
+               'LSD - Love Sugar & Dough', 'Bapu Ki Kutiya',
+               'Shreeleela Bhojnalaya', 'D2i', 'Jalsa', 'Nakhrali Dhani',
+               'M2 Restaurant', "The Sultan's", 'Hotel Apna Avenue Foody',
+               'Chlorophyll', 'Kukdu Kuu Club', 'Romba South', 'I Contrast',
+               'The Belgian Waffle Co.', 'Monica Galaxy', "Top 'N' Town",
+               'London Bubble Co.', 'World of Waffles', "Una's", 'Sweet N Slice',
+               'Sheetal Gazak & Kulfi', 'Cool Uncle Ice Cream Lounge & Cafe',
+               'Live Tawa Ice Cream', '99 PanCakes', 'N.O.W - Nest of Waffles',
+               'Havmor- Ice creams', 'Top N Town - Humpty Dumpty', 'McCafe',
+               'The Cake Story', 'Nema Sweets', "Dinshaw's Cream Studio",
+               'Ice Balls & Slice Square', 'Baskin Robbins', 'Nema Kulfi Faluda',
+               'Food Land Ice Cream and Cafe', 'Amul Store', 'Indore Kulfi House',
+               'Waff Up! by Foobae', 'Nice Natural Ice Cream', 'Nema Kulfi',
+               'Nema Kulfi & Gajak', 'Nema Malwi Mithas', 'Mhow Kulfi',
+               'Top N Town', "Kwality Wall's Humty Dumty", 'Agrawal Ice Cream',
+               'Amul Shoppie', "D'Chocolatist", 'Amul Parlour',
+               'Shree Jain Kulfi and  ?', 'Cakes N Craft', 'Live Tawa Icecream',
+               "Priyamvada's Amul Ice Cream Parlour", 'Shri Anand Ice Cream',
+               'Top n Town- CGS Ice Cream Delight', 'Waff Up!',
+               'Amul Waabasta Scoops', 'Ice Cream Online', 'Ice Cream Hub',
+               'Dairy Don', 'Waffled', 'ifruit Delight', 'Live Ice Cream',
+               'Jainam Kulfi', 'Iceberg Cafe & Bharkadevi Ice Cream',
+               'Agrawal Icecream', 'Perfect Bakery', 'Valentine Cafe & Bakery',
+               'Bakers Lounge', 'Bake Well Bakery Shop', 'Nafees Bakers',
+               'Cake Me Away', "Jain's Trupti Bakes N Beans", 'Nafees Bakery',
+               'Cakes 365', "The RJ's Bakery & Cake Shop", "The RJ's Everfresh",
+               'The Baking Room', 'Baked Inn', "Granny's Restaurant",
+               'Peace of Cake', 'Nafees Cakes & Grills', "Khurana's",
+               '24 Hours Bakery Shop', "Baker's Lounge",
+               'Occasion - Hotel Amar Vilas', '420 Bites', 'Mini Me Bakers',
+               'Bakery Bites', 'Cake Makers', 'Kerala Sweets Bakery',
+               'Sweet Little Bakery', 'Little Chicago', 'Puff N Plum Bakery',
+               'Ajanta Bakery', 'Monica Bakers & Fast Food',
+               "Cake Central By Cakesmith's Alley", 'Red Maple Bakery',
+               'Maan Bakery', 'Suffa Restaurant', "Bittu's Bakes",
+               'The Little Box Bakery', 'Pastry Pop Bakers', 'King of Cakes',
+               'Pastry Parlor', 'Hot And chill', 'Cafe Temptation',
+               'My Choice Cafe & Bakery', 'Gurukripa Bakery & Namkeen',
+               'Happy Oven Bakery', 'Papa Bakery', 'Eat A Treat', 'CM9 Bakery',
+               'Cake Me Up - Hotel WOW', 'Shree Krishna Cakes', 'KND Bakery',
+               'Whisk "N" Spatula', 'Hot Treat', "The Jain's Cakery",
+               'Baker Street', 'Cake Decor', 'Shrinath', 'Star Bakery',
+               'The Masterpiece Cakery', 'Mishri Sweets', 'Gujrat Sweets',
+               'Ratan Sev Bhandar', 'Suresh Namkeen and Sweets',
+               'Vikas Sweets & Restaurant', 'Annapurna Sweet Centre',
+               'Shri Sweets', 'Nagori Sweets', 'Shri Agrawal Sweets',
+               'Jain Shree Sweets', 'Vikas Sweets And Fast Food',
+               'Aajibai Sweets', 'Hello Halwai Namkeen', 'Marothiya Pedewala',
+               'New Agrawal Sweets', 'Shankar Namkeen',
+               'Shree Bhairavnath Misthan Bhandar', 'Shri Ram Sweets and Namkeen',
+               'Naman Namkeen Sweets and Bakery', 'JMB - Jain Mithai Bhandar',
+               'Shree Nath', 'Maheshwari Sweets', 'Shree Gangour Sweets',
+               'Shree Sundaram Sweet', 'New Mahaveer Dairy', 'Shree Arti Sweets',
+               'Shree Meenakshi Sweets',
+               'Bhagat Singh Chandan Singh Dudh Walo Ki Mithaiya', 'Shree Sweets',
+               'Tasty Center', 'Ladu Maharaj', 'Surbhi Sweets',
+               'Shree Mathurawala Sweets', 'Jmb Jain Sweets', 'Satyam Sweets',
+               'Khandelwal Sweets', 'Shree Balaji Namkeen & Sweets',
+               'Agrawal Namkeen Center', 'Sothewala Sweets',
+               'Mamaji Namkeen and Sweets', 'Shree Nath Ke Namkeen',
+               'Gelda Namkeen and Sweets', 'Mousa Sweets & Namkeens',
+               'Mauji Hot Food And Sweets', 'Sindh Sweets',
+               'Jai Ambe Namkeen Sweets', 'Maa Annapurna Sweets And Namkeen',
+               'Kesriram Sweets', 'Mahaveer Namkeen', 'Sharma Sweets and Namkeen',
+               'Quality Sweets', 'Nema Sandwich Point',
+               'Sri Agarwal Sweets And Namkeen', 'Padmawati Parshawa Namkeen',
+               'Agrawal Ji Ke Namkeen', 'Jai Shree Kalki Sweets and Restaurant',
+               'Vrindavan Sweets And Namkeen', 'Shri Agrawal Sweets & Namkeen',
+               'Taste of Malwa', 'Ganesh Namkeen',
+               'Prakash Namkeen with Fast Foods', 'Parag Mishthaan',
+               'Indore Pub Exchange', 'Lighthouse',
+               'Kava Lounge - Fairfield by Marriott', 'Masala Medley Cafe',
+               'Cafe Bake Well', 'Mugs & Beans', 'Down Town Cafe', 'Effe Cafe',
+               'The Nest', 'Checkmate Cafe', 'Sassy House - All Day Cafe',
+               'The Story Cafe', 'The Chai Bar', 'La Pink Cafe', 'O2 Cafe 24*7',
+               'The Urban Gumti', "Buddy's", 'Manas Klassika - The Cafe',
+               'Cafe Chokolade', "Biggies Burger 'n' More", 'Westeros',
+               'Cafe XOXO', 'Koffee King', 'Trap House Cafe',
+               'Coco Nibs The Gourmet Cafe', 'Voyage Cafeteria',
+               'The Obroma Cafe', "Ovenly by Khurana's", 'Cafe@BLU',
+               'Jail The Cafe', 'Cafe Unplugged', 'Nirvana - The Cafe',
+               'The Ranjeet Cafe', 'The Barrel Street Cafe', 'Atrangi cafe',
+               'Haveli The Bungalow Cafe', 'Mogambo Di Gravity',
+               'The Vintage Book Cafe', 'LaCasa Resto Cafe', 'Frespresso',
+               'Grab & Run Cafe', 'Chai Sutta Bar', 'Any Time Cafe',
+               'COD - Come On Dear', 'Jail Chai Bar', 'Bhadaas Cafe',
+               '96,97 Horror Street Cafe',
+               "Jonathan's Kitchen Cafe & Boulangerie", 'Deja Vu Cafe',
+               'The Riffing Cult', '09 Street Cafe', 'Lotus Cafe',
+               "Komal 's Cake Shoppee", 'Yo China', 'Kailash Parbat', 'Dakaar',
+               'Chaap Junction by Wah Ji Wah', 'Shahi Durbaar', 'Chinese Bite',
+               "Amigo's", 'Cafe Bollywood', "Sarika's Rasoi", 'Spicyka',
+               'Taberna Online Kitchen', "Charley's Cafe", 'Purple Wok',
+               'Ajanta Sandwich', 'Prakash Kulfi And Faluda', 'Momos & Rolls',
+               'Agra Chaat', "Cafe 8 o'Clock", 'Sanjay Egg Centre',
+               'Potato Twister', 'Corn and Corn', 'Indori Bhel',
+               'Go Bananas - Sayaji Hotel', 'Mad-eira - The Sensation Hotel',
+               'Ozone Wine & Dine', 'Robusta Cafe', 'Cafe Blue Turtle',
+               'Hotel Surya', 'Bottom Sip Bar & Restaurant', 'The Roof',
+               'Amaltas', 'Carobar  Indore', 'A-1 VIP Bar & Restaurant',
+               'Fuel Bar', 'Hotel Shivani',
+               'The Liquid Restro Bar - Hotel Uday Palace',
+               'Good Luck Restaurant & Bar', 'Hotel Sunder', 'Tonicue The Bar',
+               'Clink Bar', 'Hotel Surbhi Restaurant & Bar',
+               'Fantasy Lounge and Bar', 'Signature Bar', 'Fiesta',
+               'Vijayshree Sandwich', 'Sagar Juice Center', 'Ghamandi Lassi',
+               'Aspi', 'Thick Shake', 'Sagar Juice Centre',
+               'Naturas Foodies Point', 'Anand Shree Fruit Bonanza & Cafe',
+               'Anand Shree Fruit Juice Centre', 'Shree Goyal Juice Center',
+               'Navin Coconut Crush', 'Cool Down', 'Gaushtham Lassiwala Cafe',
+               'The London Shakes', 'Sigdi Dosa Cafe Yolo', 'Raj Sandwich Point',
+               'Trupti Juice A Chat Chawpati', 'Jay Mahakal Juice',
+               'Sai Sandwich and Juice Centre', 'Boba Brew', 'Sagar Juice',
+               'Cafe Coffee Shot', "A One's Juice Center", 'Gourav Juice Center',
+               'Natural Juice Bar & Restaurant', 'The Somras Point',
+               'Jai Ambe Maa Ganna Raas', 'AR Cafe', 'Shraddha Cold Drinks',
+               'Juice point', 'Sanchi Point', 'Tandoori Chai', 'MP-09 Chai Bar',
+               'Shree Ji Juice.Com', 'Shri Ujwal Punjabi Lassi', 'Mr. Chicken',
+               'Mama Ji Ka Dhaba', 'Kesarlal Restaurant',
+               'Chachaji Makhan Wala Dhabha', 'Nanaksar', 'Kelu Ka Dhaba',
+               'Devendra Da Dhaba', 'Kelu Da Dhaba', 'Shree Hari Om Dhaba Famous',
+               'Dhabha Tari Seth Ka', 'Aman Punjabi Dhaba', 'Arora Ji Da Dhaba',
+               'Midland Dhaba', 'Kaka Ki Mehfil Mitran Da Dhaba',
+               'NPD- New Punjabi Dhaba', 'Shiv Shakti Dhaba', 'Jaiswal Ka Dhaba',
+               'Bhartiya Bhojnalay', 'Maa Anusuiyaa Bhojanalaya',
+               'Vaibhavi Bhojanalaya', 'Shree Ji Restaurant',
+               'Shree Leela Bhojanalya', 'Jain Shree Puri Bhandar',
+               'Jain Shree Bhojnalay', 'Karnawat Bhojnalay',
+               'Siddhivinayak Bhojnalaya', 'Fursat Mess',
+               'Mishra JIi Ka Bhojnalaya', 'Rajasthani Bhojanalaya',
+               'Baba Bhojanlaya', 'Sankalp Bhojnalay',
+               'Shree Krishna Bhojanalaya', 'Shree Balaji Bhojnalaya & Chinese',
+               'Arti Bhojnalay', 'Jai Mahakal Bhojnalaya',
+               'Shri Kripa Bhojnalaya', 'Kalyan Bhojnalaya',
+               'Sukh Sagar Bhojnalaya', 'Shreenath Bhojnalay',
+               'Vaishnavi Bhojnalay', 'Shri Krishna Restaurant', "Mom's Thali",
+               'Anmol Bhojanalay', 'Dana Pani Mess', 'Annapurna Restaurant',
+               '56 Bhoog', 'Hotel Rajbhog', 'Mahadev Bhojnalay',
+               'Rajasthani Bhojnalaya Fast Food', 'Shri Laxmi Bhojanalaya',
+               'Shree Thakur Baba Tiffin Service', 'JMC Bhojnalaya',
+               'Patel Restaurant', 'Love Kush Restaurant', 'Manish Bhojnalaya',
+               'Ramji Baba Bhojnalaya And Tiffin Services', 'Tummy Truck',
+               'G3 Royal Omelette', 'Tahoora Chickens', 'Bullet BBQ',
+               'Foodie Junction', 'Foodinn Platter On Wheels',
+               'Karnawat Pan Bhojan', 'Raj Pan Sadan', 'Apsara Paan',
+               'Paan Wale Bhaiya', 'Khushbu Paan Shop', 'Santushti Mess',
+               'Shree Nathji Tiffin Centre', 'iFoodLounge', 'The Eyry',
+               'Marbella Cafebar', 'American Bawarchi', 'Cafe Buddies',
+               'Dyno Kitchen', 'Sankalp', "Nema's Food Island",
+               'Leaves & Loafs Cafe & Bakery', 'Dash Parathas', 'Chilli Grill',
+               'Icy Spicy', 'Royal Sandwich', 'Anand Shree Fruit Bonanza',
+               'Patang - Hotel Daksh Residency', 'Panna Restaurant',
+               'Central Coffee House', 'Cafe Udipi', 'Meals Lab', 'Mr. Egg King',
+               'The Samosa State', 'Mr. Tiffins', 'Sawariya Chaat House',
+               'Vrindavan Corn Choupati', 'The Chicken Company',
+               "Bittu's Dahi Bada", 'Fresh Serve Dine & Cafe', 'Desi Tadka',
+               'Seasoning', 'Chulha - Papaya Tree Hotel', 'The High Garden',
+               'Food Fantasy', 'A3 Family Restaurant', 'Magik 24*7', 'Dip N Dine',
+               'Sigda', 'Kifayati Kitchen', 'Khana on Choice', 'Diners Park',
+               'Golden Treat', 'Sizzling Barbeque by Zafri', "Pinto's Kitchen",
+               'Solitaire Restaurant', 'Go4Meal by Teashack', 'Lotus Hut',
+               'F.Y.I', 'Galliyara Restaurant', 'Tadka Laga',
+               "Arora's Central Kitchen", 'Neelkanth Restaurant']
+        autocomplete(document.getElementById("myInput"), countries);
+        </script>
+        
+</body>
+</html>

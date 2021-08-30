@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <title>Restaurant Guru</title>
+        <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styleoutput.css') }}">
+
+        <link href="https://fonts.googleapis.com/css?family=Cinzel+Decorative:400,700|Merriweather:400,700&display=swap" rel="stylesheet">
+        
+    </head>
+</html>
+<body>
+    <div class="first">
+        <div class="navbar">
+            <img src="static/img/Group 1.png">
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('explore') }}">Search</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+        
+    </div>
+    <div class="container restaurant-container">
+        <ul class="list-unstyled">
+            {% if restaurants | length > 0 %} {% for res in restaurants %}
+            <li class="media mt-2 res-card">
+                <img src="static/img/output.png" width="200px" height="100%" class="mr-3" alt="...">
+                <div class="media-body">
+                    <h5 class="mt-0">{{ res['name'] }}</h5>
+                    <p>Rating: <span class="badge badge-success d-inline">{{ res['aggregate_rating'] }}</span></p>
+                    <div class="res-content">
+                        <p class="text-muted">{{ res['address'] }}</p>
+                        <p><span class="timing">Timing: {{ res['timings'] }}</span></p>
+                        <button class="more-info"><a href="{{ res['url'] }}" target="_blank">More Info</a></button>
+                    </div>
+                </div>
+            </li>
+            {% endfor %} {% else %}
+            <li class="mt-2">
+                <div class="text-center align-middle" style="color:#ffa5a5;">
+                    <h5>Sorry, No Result Found. ☹</h5>
+                    <p>Try again 🙂</p>
+                        
+                    
+                </div>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+
+</body>
+</html>

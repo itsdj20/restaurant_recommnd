@@ -1,0 +1,48 @@
+<html>
+    <head>
+        <title>Restaurant Guru</title>
+        
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylehome.css') }}">
+        <link href="https://fonts.googleapis.com/css?
+        family=Dosis&display=swap" rel="stylesheet">
+    </head>
+</html>
+<body>
+    <div class="first">
+        <div class="navbar">
+            <img src="static/img/Group 1.png">
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+        <div class="banner">
+            <div class="left-column">
+                <div class="welcome">
+                    <img src="static/img/Welcome.png">
+                    <p>to restaurant recommendation system, based on your taste</b>
+                    <br>We know what you want...</p>
+                </div>
+                <div class="input">
+                    <form action="{{ url_for('explore')}}">
+                    <input id="city" type="text" placeholder="Enter your city..."> 
+                    <button id="explore" type="submit" class="ab" >Explore</button>
+                </form>
+                </div>
+            </div>
+            <div class="right-column">
+                <img src="static/img/Group 2.png">
+            </div>
+        </div>
+    </div>
+  
+
+
+
+
+
+
+
+
+</body>
