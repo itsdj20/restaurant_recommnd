@@ -2,7 +2,7 @@ from flask import Flask, render_template, url_for, flash, redirect, request
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-lko_rest=pd.read_csv(r"C:\Users\DJ\Desktop\application\res_indore.csv")
+lko_rest=pd.read_csv(r"res_indore.csv")
 app = Flask(__name__)
 
 def searching(name,lko_rest=lko_rest):
